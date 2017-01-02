@@ -6,7 +6,7 @@
 /*   By: aazri <aazri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 15:39:39 by aazri             #+#    #+#             */
-/*   Updated: 2016/12/31 18:10:53 by leith            ###   ########.fr       */
+/*   Updated: 2017/01/02 19:03:50 by leith            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,11 @@ int main(int argc, char const *argv[])
 	if(argc != 2)
 		exit(0);
 	fd = open(argv[1], O_RDONLY);
-	while(get_next_line(fd, &line));
+	while(get_next_line(fd, &line))
+	{
+		puts(line);
+		//free(line);
+	}
 	return 0;
 }
 
@@ -45,11 +49,11 @@ static char *ft_rest(char *buff, size_t b)
 	return (rest);
 }
 
-static int ft_search(char **line, char *buff, int rd)
+static char *ft_search(char **line, char *buff, char *rest)
 {
 	size_t i;
 	char buff_tmp[BUFF_SIZE + 1] = "\0";
-	static char *rest = NULL;
+	//static char *rest = NULL;
 
 	i = 0;
 	while(buff[i] && buff[i] != '\n' && buff[i] != EOF)
@@ -65,27 +69,33 @@ static int ft_search(char **line, char *buff, int rd)
 	rest = ft_rest(buff, i);
 	*line = ft_strjoin(*line, buff_tmp);
 	if(buff[i] == '\n')
-		return (0);
-	return(1);
+		return (rest);
+	return (NULL);
 }
 
 int	get_next_line(const int fd, char **line)
 {
-	int rd;
 	char *buff;
+	static char *rest = NULL;
+	//char buff_tab[BUFF_SIZE + 1] = "\0";
 
 	*line = ft_strnew(BUFF_SIZE);
 	buff = ft_strnew(BUFF_SIZE);
-	while((rd = read(fd, &*buff, BUFF_SIZE)))
+	while((read(fd, &*buff, BUFF_SIZE)))
 	{
-		if(!(ft_search(line, buff, rd)))
+		if((rest = ft_search(line, buff, rest)))
 		{
-			puts(*line);
 			free(buff);
 			return (1);
 		}
 	}
-	//ft_search(line, buff, rd);
+	if(rest[0])
+	{
+		ft_strcpy(*line, rest);
+		free(buff);
+		free(rest);
+		return (1);
+	}
 	free(buff);
 	return (0);
 }
