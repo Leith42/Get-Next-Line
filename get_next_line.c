@@ -6,7 +6,7 @@
 /*   By: aazri <aazri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 15:39:39 by aazri             #+#    #+#             */
-/*   Updated: 2017/01/02 19:59:12 by leith            ###   ########.fr       */
+/*   Updated: 2017/01/03 12:37:56 by aazri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ int main(int argc, char const *argv[])
 	while(get_next_line(fd, &line))
 	{
 		puts(line);
-		//free(line);
+	//	free(line);
 	}
 	return 0;
 }
 
-static char *ft_rest(char *buff, size_t b)
+static char *ft_stock_rest(char *buff, size_t b)
 {
 	int i;
 	char *rest;
@@ -49,7 +49,7 @@ static char *ft_rest(char *buff, size_t b)
 	return (rest);
 }
 
-static char *ft_search(char **line, char buff[], char *rest)
+static char *ft_stock_line(char **line, char buff[], char *rest)
 {
 	size_t i;
 	char buff_tmp[BUFF_SIZE + 1] = "\0";
@@ -64,8 +64,9 @@ static char *ft_search(char **line, char buff[], char *rest)
 	{
 		*line = ft_strjoin(*line, rest);
 		free(rest);
+		//rest = NULL;
 	}
-	rest = ft_rest(buff, i);
+	rest = ft_stock_rest(buff, i);
 	*line = ft_strjoin(*line, buff_tmp);
 	if(buff[i] == '\n')
 		return (rest);
@@ -74,27 +75,21 @@ static char *ft_search(char **line, char buff[], char *rest)
 
 int	get_next_line(const int fd, char **line)
 {
-	//char *buff;
 	static char *rest = NULL;
-	char buff_tab[BUFF_SIZE + 1] = "\0";
+	char buffer[BUFF_SIZE + 1] = "\0";
 
 	*line = ft_strnew(BUFF_SIZE);
-	//buff = ft_strnew(BUFF_SIZE);
-	while((read(fd, &*buff_tab, BUFF_SIZE)))
+	while((read(fd, buffer, BUFF_SIZE)))
 	{
-		if((rest = ft_search(line, buff_tab, rest)))
-		{
-		//	free(buff);
+		if((rest = ft_stock_line(line, buffer, rest)))
 			return (1);
-		}
 	}
-	if(rest)
+	/*if(rest)
 	{
 		ft_strcpy(*line, rest);
-		//free(buff);
 		free(rest);
+		rest = NULL;
 		return (1);
-	}
-	//free(buff);
+	}*/
 	return (0);
 }
