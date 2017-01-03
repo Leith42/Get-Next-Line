@@ -6,7 +6,7 @@
 /*   By: aazri <aazri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 15:39:39 by aazri             #+#    #+#             */
-/*   Updated: 2017/01/03 12:37:56 by aazri            ###   ########.fr       */
+/*   Updated: 2017/01/03 15:10:33 by aazri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,7 @@ int main(int argc, char const *argv[])
 		exit(0);
 	fd = open(argv[1], O_RDONLY);
 	while(get_next_line(fd, &line))
-	{
 		puts(line);
-	//	free(line);
-	}
 	return 0;
 }
 
@@ -46,6 +43,11 @@ static char *ft_stock_rest(char *buff, size_t b)
 			b++;
 		}
 	}
+	else
+	{
+		free(rest);
+		rest = NULL;
+	}
 	return (rest);
 }
 
@@ -55,7 +57,7 @@ static char *ft_stock_line(char **line, char buff[], char *rest)
 	char buff_tmp[BUFF_SIZE + 1] = "\0";
 
 	i = 0;
-	while(buff[i] && buff[i] != '\n' && buff[i] != EOF)
+	while(buff[i] && buff[i] != '\n')
 	{
 		buff_tmp[i] = buff[i];
 		i++;
@@ -64,19 +66,35 @@ static char *ft_stock_line(char **line, char buff[], char *rest)
 	{
 		*line = ft_strjoin(*line, rest);
 		free(rest);
-		//rest = NULL;
 	}
 	rest = ft_stock_rest(buff, i);
 	*line = ft_strjoin(*line, buff_tmp);
-	if(buff[i] == '\n')
+	if(buff[i] == '\n' && rest)
 		return (rest);
 	return (NULL);
+}
+
+static int	ft_count_endl(char buff[])
+{
+	size_t i;
+	size_t endl;
+
+	i = 0;
+	endl = 0;
+	while(buff[i])
+	{
+		if(buff[i] == '\n')
+			endl++;
+		i++;
+	}
+	return (endl);
 }
 
 int	get_next_line(const int fd, char **line)
 {
 	static char *rest = NULL;
 	char buffer[BUFF_SIZE + 1] = "\0";
+	size_t endl;
 
 	*line = ft_strnew(BUFF_SIZE);
 	while((read(fd, buffer, BUFF_SIZE)))
