@@ -6,7 +6,7 @@
 /*   By: aazri <aazri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 15:39:39 by aazri             #+#    #+#             */
-/*   Updated: 2017/01/02 19:03:50 by leith            ###   ########.fr       */
+/*   Updated: 2017/01/02 19:59:12 by leith            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,10 @@ static char *ft_rest(char *buff, size_t b)
 	return (rest);
 }
 
-static char *ft_search(char **line, char *buff, char *rest)
+static char *ft_search(char **line, char buff[], char *rest)
 {
 	size_t i;
 	char buff_tmp[BUFF_SIZE + 1] = "\0";
-	//static char *rest = NULL;
 
 	i = 0;
 	while(buff[i] && buff[i] != '\n' && buff[i] != EOF)
@@ -75,27 +74,27 @@ static char *ft_search(char **line, char *buff, char *rest)
 
 int	get_next_line(const int fd, char **line)
 {
-	char *buff;
+	//char *buff;
 	static char *rest = NULL;
-	//char buff_tab[BUFF_SIZE + 1] = "\0";
+	char buff_tab[BUFF_SIZE + 1] = "\0";
 
 	*line = ft_strnew(BUFF_SIZE);
-	buff = ft_strnew(BUFF_SIZE);
-	while((read(fd, &*buff, BUFF_SIZE)))
+	//buff = ft_strnew(BUFF_SIZE);
+	while((read(fd, &*buff_tab, BUFF_SIZE)))
 	{
-		if((rest = ft_search(line, buff, rest)))
+		if((rest = ft_search(line, buff_tab, rest)))
 		{
-			free(buff);
+		//	free(buff);
 			return (1);
 		}
 	}
-	if(rest[0])
+	if(rest)
 	{
 		ft_strcpy(*line, rest);
-		free(buff);
+		//free(buff);
 		free(rest);
 		return (1);
 	}
-	free(buff);
+	//free(buff);
 	return (0);
 }
