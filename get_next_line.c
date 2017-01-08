@@ -6,7 +6,7 @@
 /*   By: aazri <aazri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 15:39:39 by aazri             #+#    #+#             */
-/*   Updated: 2017/01/07 20:27:28 by leith            ###   ########.fr       */
+/*   Updated: 2017/01/08 23:49:39 by leith            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,20 @@ int main(int argc, char const *argv[])
 		puts(line);
 		ft_strdel(&line);
 	}
+	close(fd);
 	return 0;
+}
+
+static int	ft_stock(char **line, char **ret, char **endl_pos)
+{
+	if(!(*line = ft_strsub(*ret, 0, *endl_pos - *ret)))
+		return (-1);
+//	free(*ret);
+	/*while(**endl_pos == '\n')
+		*endl_pos += 1;*/
+	if(!(*ret = ft_strdup(*endl_pos + 1)))
+		return (-1);
+	return (1);
 }
 
 static int	ft_read(int fd, char **ret)
@@ -39,19 +52,10 @@ static int	ft_read(int fd, char **ret)
 		buff[ret_read] = '\0';
 		if(!(new_str = ft_strjoin(*ret, buff)))
 			return (-1);
-		free(*ret);
+		//free(*ret);
 		*ret = new_str;
 	}
 	return (ret_read);
-}
-
-static int	ft_stock(char **line, char **ret, char **endl_pos)
-{
-	if(!(*line = ft_strsub(*ret, 0, *endl_pos - *ret)))
-		return (-1);
-	free(*ret);
-	*ret = ft_strdup(*endl_pos + 1);
-	return (1);
 }
 
 int	get_next_line(const int fd, char **line)
