@@ -6,7 +6,7 @@
 /*   By: aazri <aazri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 15:39:39 by aazri             #+#    #+#             */
-/*   Updated: 2017/01/03 15:10:33 by aazri            ###   ########.fr       */
+/*   Updated: 2017/01/07 20:27:28 by leith            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,100 +14,72 @@
 
 int main(int argc, char const *argv[])
 {
-	char *line;
+	char *line = NULL;
 	int fd;
 
 	if(argc != 2)
 		exit(0);
 	fd = open(argv[1], O_RDONLY);
 	while(get_next_line(fd, &line))
+	{
 		puts(line);
+		ft_strdel(&line);
+	}
 	return 0;
 }
 
-static char *ft_stock_rest(char *buff, size_t b)
+static int	ft_read(int fd, char **ret)
 {
-	int i;
-	char *rest;
+	char	buff[BUFF_SIZE + 1];
+	int	ret_read;
+	char *new_str;
 
-	i = 0;
-	rest = ft_strnew(BUFF_SIZE);
-	if(buff[b])
+	if((ret_read = read(fd, buff, BUFF_SIZE)))
 	{
-		while(buff[b] == '\n')
-			b++;
-		while(buff[b] && buff[b] != '\n' && buff[b] != EOF)
-		{
-			rest[i] = buff[b];
-			i++;
-			b++;
-		}
+		buff[ret_read] = '\0';
+		if(!(new_str = ft_strjoin(*ret, buff)))
+			return (-1);
+		free(*ret);
+		*ret = new_str;
 	}
-	else
-	{
-		free(rest);
-		rest = NULL;
-	}
-	return (rest);
+	return (ret_read);
 }
 
-static char *ft_stock_line(char **line, char buff[], char *rest)
+static int	ft_stock(char **line, char **ret, char **endl_pos)
 {
-	size_t i;
-	char buff_tmp[BUFF_SIZE + 1] = "\0";
-
-	i = 0;
-	while(buff[i] && buff[i] != '\n')
-	{
-		buff_tmp[i] = buff[i];
-		i++;
-	}
-	if(rest)
-	{
-		*line = ft_strjoin(*line, rest);
-		free(rest);
-	}
-	rest = ft_stock_rest(buff, i);
-	*line = ft_strjoin(*line, buff_tmp);
-	if(buff[i] == '\n' && rest)
-		return (rest);
-	return (NULL);
-}
-
-static int	ft_count_endl(char buff[])
-{
-	size_t i;
-	size_t endl;
-
-	i = 0;
-	endl = 0;
-	while(buff[i])
-	{
-		if(buff[i] == '\n')
-			endl++;
-		i++;
-	}
-	return (endl);
+	if(!(*line = ft_strsub(*ret, 0, *endl_pos - *ret)))
+		return (-1);
+	free(*ret);
+	*ret = ft_strdup(*endl_pos + 1);
+	return (1);
 }
 
 int	get_next_line(const int fd, char **line)
 {
-	static char *rest = NULL;
-	char buffer[BUFF_SIZE + 1] = "\0";
-	size_t endl;
+	static char *ret = NULL;
+	char *endl_pos;
+	int ret_read;
 
-	*line = ft_strnew(BUFF_SIZE);
-	while((read(fd, buffer, BUFF_SIZE)))
+	if (!ret)
 	{
-		if((rest = ft_stock_line(line, buffer, rest)))
-			return (1);
+		if(!(ret = ft_strnew(0)))
+			return (-1);
 	}
-	/*if(rest)
+	while(!(endl_pos = ft_strchr(ret, '\n')))
 	{
-		ft_strcpy(*line, rest);
-		free(rest);
-		rest = NULL;
-		return (1);
-	}*/
-	return (0);
+		if((ret_read = ft_read(fd, &ret)) == 0)
+		{
+			if((endl_pos = ft_strchr(ret, '\0')) == ret)
+			{
+				free(ret);
+				return (0);
+			}
+		}
+		else if(ret_read < 0)
+		{
+			free(ret);
+			return (-1);
+		}
+	}
+	return (ft_stock(line, &ret, &endl_pos));
 }

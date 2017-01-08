@@ -6,7 +6,7 @@
 /*   By: aazri <aazri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/06 14:01:27 by aazri             #+#    #+#             */
-/*   Updated: 2017/01/02 18:27:17 by leith            ###   ########.fr       */
+/*   Updated: 2017/01/07 18:49:07 by leith            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,6 @@ char	*ft_strcpy(char *dest, const char *src)
 		dest[i] = src[i];
 		i++;
 	}
-	//dest[i] = src[i];
+	dest[i] = src[i];
 	return (dest);
 }
