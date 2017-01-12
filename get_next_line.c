@@ -6,7 +6,7 @@
 /*   By: aazri <aazri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 15:39:39 by aazri             #+#    #+#             */
-/*   Updated: 2017/01/12 13:05:18 by leith            ###   ########.fr       */
+/*   Updated: 2017/01/12 22:28:48 by leith            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,34 +16,34 @@ int main(int argc, char const *argv[])
 {
 	char *line = NULL;
 	int fd;
-	int ret;
+	int save;
 
 	if(argc != 2)
 		return(-1);
 	fd = open(argv[1], O_RDONLY);
-	while((ret = get_next_line(fd, &line)))
+	while((save = get_next_line(fd, &line)))
 	{
-		printf("%s   | len : %d\n", line, ret);
+		printf("%s\n", line);
 		ft_strdel(&line);
 	}
 	close(fd);
 	return 0;
 }
 
-static int	ft_stock(char **line, char **ret, char **endl_pos)
+static int	ft_get_line(char **line, char **save, char **endl_pos)
 {
 	char *tmp;
 
-	if(!(*line = ft_strsub(*ret, 0, *endl_pos - *ret)))
+	if(!(*line = ft_strsub(*save, 0, *endl_pos - *save)))
 		return (-1);
 	if(!(tmp = ft_strdup(*endl_pos + 1)))
 		return (-1);
-	ft_strdel(&*ret);
-	*ret = tmp;
+	ft_strdel(&*save);
+	*save = tmp;
 	return (1);
 }
 
-static int	ft_read(int fd, char **ret)
+static int	ft_stock(int fd, char **save)
 {
 	char	buff[BUFF_SIZE + 1] = "\0";
 	char	*new_str;
@@ -51,42 +51,40 @@ static int	ft_read(int fd, char **ret)
 
 	if((ret_read = read(fd, buff, BUFF_SIZE)))
 	{
-		if(!(new_str = ft_strjoin(*ret, buff)))
+		if(!(new_str = ft_strjoin(*save, buff)))
 			return (-1);
-		ft_strdel(&*ret);
-		*ret = new_str;
+		ft_strdel(&*save);
+		*save = new_str;
 	}
 	return (ret_read);
 }
 
 int	get_next_line(const int fd, char **line)
 {
-	static char *ret = NULL;
-	char	*endl_pos;
-	int		ret_read;
+	static char *save = NULL;
+	char		*endl_pos;
+	int			ret_read;
 
-	if (!ret)
+	if (!save)
 	{
-		if(!(ret = ft_strnew(0)))
+		if(!(save = ft_strnew(0)))
 			return (-1);
 	}
-	while(!(endl_pos = ft_strchr(ret, '\n')))
+	while (!(endl_pos = ft_strchr(save, '\n')))
 	{
-		if((ret_read = ft_read(fd, &ret)) == 0)
+		if ((ret_read = ft_stock(fd, &save)) == 0)
 		{
-			if((endl_pos = ft_strchr(ret, '\0')) == ret)
-			{
-				ft_strdel(&ret);
-				return (0);
-			}
+			ft_strdel(&save);
+			return (0);
 		}
-		else if(ret_read < 0)
+		else if (ret_read == -1)
 		{
-			ft_strdel(&ret);
+			ft_strdel(&save);
 			return (-1);
 		}
+
 	}
-	if(ft_stock(line, &ret, &endl_pos))
+	if (ft_get_line(line, &save, &endl_pos))
 		return (ft_strlen(*line));
 	return (-1);
 }
