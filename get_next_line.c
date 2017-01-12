@@ -6,7 +6,7 @@
 /*   By: aazri <aazri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 15:39:39 by aazri             #+#    #+#             */
-/*   Updated: 2017/01/12 12:58:30 by leith            ###   ########.fr       */
+/*   Updated: 2017/01/12 13:05:18 by leith            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int main(int argc, char const *argv[])
 	int ret;
 
 	if(argc != 2)
-		exit(0);
+		return(-1);
 	fd = open(argv[1], O_RDONLY);
 	while((ret = get_next_line(fd, &line)))
 	{
@@ -86,6 +86,7 @@ int	get_next_line(const int fd, char **line)
 			return (-1);
 		}
 	}
-	ft_stock(line, &ret, &endl_pos);
-	return (ft_strlen(*line));
+	if(ft_stock(line, &ret, &endl_pos))
+		return (ft_strlen(*line));
+	return (-1);
 }

@@ -6,7 +6,7 @@
 /*   By: aazri <aazri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 15:39:53 by aazri             #+#    #+#             */
-/*   Updated: 2017/01/12 11:58:10 by leith            ###   ########.fr       */
+/*   Updated: 2017/01/12 13:05:17 by leith            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 
 # include "libft/libft.h"
 # include <stdio.h>
-# include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
 
