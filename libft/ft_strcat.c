@@ -6,13 +6,13 @@
 /*   By: aazri <aazri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/05 23:18:33 by aazri             #+#    #+#             */
-/*   Updated: 2017/01/08 17:01:51 by leith            ###   ########.fr       */
+/*   Updated: 2017/01/13 13:45:17 by aazri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char *ft_strcat(char *s1, const char *s2)
+char	*ft_strcat(char *s1, const char *s2)
 {
 	size_t	len;
 	int		i;

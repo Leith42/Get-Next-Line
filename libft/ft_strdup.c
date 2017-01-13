@@ -6,7 +6,7 @@
 /*   By: aazri <aazri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/06 11:37:07 by aazri             #+#    #+#             */
-/*   Updated: 2017/01/11 17:21:26 by leith            ###   ########.fr       */
+/*   Updated: 2017/01/13 13:43:50 by aazri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ char	*ft_strdup(const char *src)
 {
 	char	*dest;
 
-	if(!(dest = ft_strnew(ft_strlen(src))))
-        return (NULL);
+	if (!(dest = ft_strnew(ft_strlen(src))))
+		return (NULL);
 	dest = ft_strcpy(dest, src);
 	return (dest);
 }
