@@ -6,7 +6,7 @@
 /*   By: aazri <aazri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 15:39:39 by aazri             #+#    #+#             */
-/*   Updated: 2017/01/13 13:58:34 by aazri            ###   ########.fr       */
+/*   Updated: 2017/01/13 14:42:29 by aazri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ static int	ft_stock(int fd, char **save)
 
 int			get_next_line(const int fd, char **line)
 {
+	static *t_list;
 	static char *save = NULL;
 	char		*endl_pos;
 	int			ret_read;
@@ -66,7 +67,10 @@ int			get_next_line(const int fd, char **line)
 			}
 		}
 		else if (ret_read == -1)
+		{
+			ft_strdel(&save);
 			return (-1);
+		}
 		else
 			endl_pos = ft_strchr(save, '\n');
 	}
