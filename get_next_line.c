@@ -6,22 +6,36 @@
 /*   By: aazri <aazri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 15:39:39 by aazri             #+#    #+#             */
-/*   Updated: 2017/01/13 14:42:29 by aazri            ###   ########.fr       */
+/*   Updated: 2017/01/16 11:06:45 by leith            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int	ft_get_line(char **line, char **save, char **endl_pos)
+/*int main(int argc, char const *argv[])
+{
+	int fd;
+	char *line;
+	fd = open(argv[1], O_RDONLY);
+	while(get_next_line(fd, &line))
+	{
+		//puts(line);
+		ft_strdel(&line);
+	}
+	close(fd);
+	return 0;
+}*/
+
+static int	ft_get_line(char **line, char **save, char **endl)
 {
 	char *tmp;
 
 	tmp = NULL;
-	if (!(*line = ft_strsub(*save, 0, *endl_pos - *save)))
+	if (!(*line = ft_strsub(*save, 0, *endl - *save)))
 		return (-1);
-	if (**endl_pos == '\n')
+	if (**endl == '\n')
 	{
-		if (!(tmp = ft_strdup(*endl_pos + 1)))
+		if (!(tmp = ft_strdup(*endl + 1)))
 			return (-1);
 	}
 	ft_strdel(&*save);
@@ -32,47 +46,43 @@ static int	ft_get_line(char **line, char **save, char **endl_pos)
 static int	ft_stock(int fd, char **save)
 {
 	char	buff[BUFF_SIZE + 1];
-	char	*new_str;
+	char	*tmp;
 	int		ret_read;
 
 	ft_bzero(buff, BUFF_SIZE + 1);
 	if ((ret_read = read(fd, buff, BUFF_SIZE)))
 	{
-		if (!(new_str = ft_strjoin(*save, buff)))
+		if (!(tmp = ft_strjoin(*save, buff)))
 			return (-1);
 		ft_strdel(&*save);
-		*save = new_str;
+		*save = tmp;
 	}
 	return (ret_read);
 }
 
 int			get_next_line(const int fd, char **line)
 {
-	static *t_list;
 	static char *save = NULL;
-	char		*endl_pos;
+	char		*endl;
 	int			ret_read;
 
-	if (!save && !(save = ft_strnew(0)))
+	if (!(save) && (!(save = ft_strnew(0))))
 		return (-1);
-	endl_pos = ft_strchr(save, '\n');
-	while (!endl_pos)
+	endl = ft_strchr(save, '\n');
+	while (!endl)
 	{
 		if ((ret_read = ft_stock(fd, &save)) == 0)
 		{
-			if ((endl_pos = ft_strchr(save, '\0')) == save)
+			if ((endl = ft_strchr(save, '\0')) == save)
 			{
 				ft_strdel(&save);
 				return (0);
 			}
 		}
 		else if (ret_read == -1)
-		{
-			ft_strdel(&save);
 			return (-1);
-		}
 		else
-			endl_pos = ft_strchr(save, '\n');
+			endl = ft_strchr(save, '\n');
 	}
-	return (ft_get_line(line, &save, &endl_pos));
+	return (ft_get_line(line, &save, &endl));
 }
