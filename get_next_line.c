@@ -6,32 +6,18 @@
 /*   By: aazri <aazri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 15:39:39 by aazri             #+#    #+#             */
-/*   Updated: 2017/01/16 11:06:45 by leith            ###   ########.fr       */
+/*   Updated: 2017/01/18 16:44:08 by aazri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-/*int main(int argc, char const *argv[])
-{
-	int fd;
-	char *line;
-	fd = open(argv[1], O_RDONLY);
-	while(get_next_line(fd, &line))
-	{
-		//puts(line);
-		ft_strdel(&line);
-	}
-	close(fd);
-	return 0;
-}*/
 
 static int	ft_get_line(char **line, char **save, char **endl)
 {
 	char *tmp;
 
 	tmp = NULL;
-	if (!(*line = ft_strsub(*save, 0, *endl - *save)))
+	if (!(*line = ft_strndup(*save, ft_strlen(*save) - ft_strlen(*endl))))
 		return (-1);
 	if (**endl == '\n')
 	{
@@ -43,7 +29,7 @@ static int	ft_get_line(char **line, char **save, char **endl)
 	return (1);
 }
 
-static int	ft_stock(int fd, char **save)
+static int	ft_stock(const int fd, char **save)
 {
 	char	buff[BUFF_SIZE + 1];
 	char	*tmp;
