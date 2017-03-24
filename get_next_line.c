@@ -6,25 +6,11 @@
 /*   By: aazri <aazri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 15:39:39 by aazri             #+#    #+#             */
-/*   Updated: 2017/01/16 11:06:45 by leith            ###   ########.fr       */
+/*   Updated: 2017/03/24 14:55:31 by aazri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-/*int main(int argc, char const *argv[])
-{
-	int fd;
-	char *line;
-	fd = open(argv[1], O_RDONLY);
-	while(get_next_line(fd, &line))
-	{
-		//puts(line);
-		ft_strdel(&line);
-	}
-	close(fd);
-	return 0;
-}*/
 
 static int	ft_get_line(char **line, char **save, char **endl)
 {
