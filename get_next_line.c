@@ -6,7 +6,11 @@
 /*   By: aazri <aazri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 15:39:39 by aazri             #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2017/03/24 14:55:31 by aazri            ###   ########.fr       */
+=======
+/*   Updated: 2017/01/18 16:44:08 by aazri            ###   ########.fr       */
+>>>>>>> master
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +21,7 @@ static int	ft_get_line(char **line, char **save, char **endl)
 	char *tmp;
 
 	tmp = NULL;
-	if (!(*line = ft_strsub(*save, 0, *endl - *save)))
+	if (!(*line = ft_strndup(*save, ft_strlen(*save) - ft_strlen(*endl))))
 		return (-1);
 	if (**endl == '\n')
 	{
@@ -29,7 +33,7 @@ static int	ft_get_line(char **line, char **save, char **endl)
 	return (1);
 }
 
-static int	ft_stock(int fd, char **save)
+static int	ft_stock(const int fd, char **save)
 {
 	char	buff[BUFF_SIZE + 1];
 	char	*tmp;
