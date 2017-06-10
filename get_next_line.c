@@ -6,11 +6,11 @@
 /*   By: aazri <aazri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 15:39:39 by aazri             #+#    #+#             */
-/*   Updated: 2017/03/24 14:56:56 by aazri            ###   ########.fr       */
+/*   Updated: 2017/03/24 15:00:00 by aazri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "libft.h"
 
 static int	ft_get_line(char **line, char **save, char **endl)
 {
@@ -31,12 +31,12 @@ static int	ft_get_line(char **line, char **save, char **endl)
 
 static int	ft_stock(const int fd, char **save)
 {
-	char	buff[BUFF_SIZE + 1];
+	char	buff[GNL_BUFF_SIZE + 1];
 	char	*tmp;
 	int		ret_read;
 
-	ft_bzero(buff, BUFF_SIZE + 1);
-	if ((ret_read = read(fd, buff, BUFF_SIZE)))
+	ft_bzero(buff, GNL_BUFF_SIZE + 1);
+	if ((ret_read = read(fd, buff, GNL_BUFF_SIZE)))
 	{
 		if (!(tmp = ft_strjoin(*save, buff)))
 			return (-1);
